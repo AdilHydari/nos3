@@ -13,7 +13,7 @@ services:
             - '$SIM_DIR:$SIM_DIR'
         network_mode: host
         image: nos3
-        command: $SIM_BIN/nos-time-driver
+        command: $SIM_BIN/nos3-single-simulator time
         working_dir: $SIM_BIN
         depends_on:
             - nos_engine_server_standalone
@@ -22,7 +22,16 @@ services:
             - '$SIM_DIR:$SIM_DIR'
         network_mode: host
         image: nos3
-        command: $SIM_BIN/nos3-simulator-terminal
+        command: $SIM_BIN/nos3-single-simulator stdio-terminal
+        working_dir: $SIM_BIN
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-simulator-udp-terminal:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-single-simulator udp-terminal
         working_dir: $SIM_BIN
         depends_on:
             - nos_engine_server_standalone
@@ -99,8 +108,8 @@ services:
             - nos_engine_server_standalone
     cosmos:
         volumes:
-            - '/home/nos3/Desktop/github-nos3/gsw/cosmos:/cosmos/cosmos'
-            - '/home/nos3/Desktop/github-nos3/components/:/COMPONENTS'
+            - '$SCRIPT_DIR/../cosmos:/cosmos/cosmos'
+            - '$SCRIPT_DIR/../../components/:/COMPONENTS'
             - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
         network_mode: host
         image: ballaerospace/cosmos
