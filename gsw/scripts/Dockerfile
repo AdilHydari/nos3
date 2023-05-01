@@ -51,11 +51,11 @@ RUN cd /tmp \
 
 # Configure environment
 FROM nos2 AS nos3
-ADD ./nos3_filestore /nos3_filestore/
-RUN sed 's/fs.mqueue.msg_max/fs.mqueue.msg_max=500/' /etc/sysctl.conf \
-    && apt-get install -y \
-        /nos3_filestore/packages/ubuntu/itc-common-Release_1.10.1_i386.deb \
-        /nos3_filestore/packages/ubuntu/nos-engine-Release_1.6.1_i386.deb
+#ADD ./nos3_filestore /nos3_filestore/
+#RUN sed 's/fs.mqueue.msg_max/fs.mqueue.msg_max=500/' /etc/sysctl.conf \
+#    && apt-get install -y \
+#        /nos3_filestore/packages/ubuntu/itc-common-Release_1.10.1_i386.deb \
+#        /nos3_filestore/packages/ubuntu/nos-engine-Release_1.6.1_i386.deb
 
 RUN mkdir -p /opt/nos3 \
     && cd /opt/nos3 \

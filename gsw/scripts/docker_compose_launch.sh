@@ -41,4 +41,4 @@ export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
 #    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
 cd $SCRIPT_DIR
-docker compose up -d
+docker-compose up -d

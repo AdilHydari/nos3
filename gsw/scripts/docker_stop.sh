@@ -20,7 +20,7 @@ rm -rf /tmp/gpio_fake
 rm -rf $BASE_DIR/fsw/build/exe/cpu1/scratch/*
 
 # Docker
-cd $SCRIPT_DIR; docker compose down
+cd $SCRIPT_DIR; docker-compose down
 for i in $(docker container ls -q); do
     docker container kill $i
 done

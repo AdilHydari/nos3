@@ -5,7 +5,7 @@ services:
             - '$SIM_DIR:$SIM_DIR'
         network_mode: host
         image: nos3
-        command: /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+        command: /bin/bash #/usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
         working_dir: $SIM_BIN
         tty: true
     nos-time-driver:
@@ -95,7 +95,7 @@ services:
             - nos_engine_server_standalone
     fortytwo:
         volumes:
-            - '/opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut'
+            - '/opt/nos3/42:/opt/nos3/42'
             - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
         network_mode: host
         image: nos3
