@@ -5,7 +5,7 @@ services:
             - '$SIM_DIR:$SIM_DIR'
         network_mode: host
         image: nos3
-        command: /bin/bash #/usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+        command: /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
         working_dir: $SIM_BIN
         tty: true
     nos-time-driver:

@@ -35,7 +35,7 @@ echo ""
 
 echo "Simulators..."
 #cd $SIM_BIN
-gnome-terminal --tab --title="NOS Engine Server" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name nos_engine_server --network=host -w $SIM_BIN -t nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+gnome-terminal --tab --title="NOS Engine Server" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name nos_engine_server --network=host -w $SIM_BIN nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
 docker exec nos_engine_server cat /proc/sys/fs/mqueue/msg_max
 gnome-terminal --tab --title="NOS Time Driver" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=host -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator time
 gnome-terminal --tab --title='NOS Terminal' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=host -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
@@ -66,6 +66,8 @@ sleep 5
 
 echo "Flight Software..."
 cd $FSW_BIN
-gnome-terminal --title="NOS3 Flight Software" -- sudo docker run --rm -it -v $FSW_BIN:$FSW_BIN --network=host -w $FSW_BIN --sysctl fs.mqueue.msg_max=500 nos3 sudo $FSW_BIN/core-cpu1 -R PO &
+#gnome-terminal --title="NOS3 Flight Software" -- docker run --rm -it --name nos-fsw -v $FSW_BIN:$FSW_BIN --network=host -w $FSW_BIN --sysctl fs.mqueue.msg_max=500 nos3 $FSW_BIN/core-cpu1 -R PO &
+gnome-terminal --title="NOS3 Flight Software" -- docker run --rm -it --name nos-fsw -v $FSW_BIN:$FSW_BIN --network=host -w $FSW_BIN --sysctl fs.mqueue.msg_max=1500 nos3 sudo ./core-cpu1 -R PO &
+
 echo ""
 
