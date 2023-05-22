@@ -66,7 +66,7 @@ extern "C" {
 /*
 ** Component Include Files
 */
-#include "cam_msgids.h"
+#include "arducam_app_msgids.h"
 #include "generic_reaction_wheel_msgids.h"
 #include "nav_msgids.h"
 #include "sample_app_msgids.h"
@@ -123,8 +123,8 @@ TO_ConfigTable_t to_ConfigTable =
 
        /* 30 - 39 */
        {DS_HK_TLM_MID,                {0,0},  5,   0x0001,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
-       {CAM_HK_TLM_MID,               {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
-       {CAM_EXP_TLM_MID,              {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
+       {ARDUCAM_APP_HK_TLM_MID,       {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
+       {ARDUCAM_EXP_TLM_MID,          {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
        {GENERIC_RW_APP_HK_TLM_MID,    {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
        {NAV_SEND_HK_TLM,              {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},
        {SAMPLE_APP_HK_TLM_MID,        {0,0},  32,  0xffff,     TO_GROUP_APP | TO_MGROUP_ONE, 0,1},

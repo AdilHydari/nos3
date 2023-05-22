@@ -245,7 +245,7 @@ DS_FilterTable_t DS_FilterTable =
     },
     /* Packet Index 016 */
     {
-      /* .MessageID = */ CAM_HK_TLM_MID,
+      /* .MessageID = */ ARDUCAM_APP_HK_TLM_MID,
       /* .Filter    = */
       {
         /* File table index, filter type, N, X, O */
@@ -257,7 +257,7 @@ DS_FilterTable_t DS_FilterTable =
     },
     /* Packet Index 017 */
     {
-      /* .MessageID = */ CAM_EXP_TLM_MID,
+      /* .MessageID = */ ARDUCAM_EXP_TLM_MID,
       /* .Filter    = */
       {
         /* File table index, filter type, N, X, O */
