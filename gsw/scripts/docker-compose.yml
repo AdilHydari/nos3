@@ -7,6 +7,7 @@ services:
         image: nos3
         command: /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
         working_dir: $SIM_BIN
+        stdin_open: true
         tty: true
     nos-time-driver:
         volumes:
@@ -15,6 +16,8 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-single-simulator time
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     nos3-simulator-terminal:
@@ -24,6 +27,8 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-single-simulator stdio-terminal
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     nos3-simulator-udp-terminal:
@@ -33,6 +38,8 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-single-simulator udp-terminal
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     nos3-cam-simulator:
@@ -42,15 +49,52 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-cam-simulator
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
-    nos3-generic-reactionwheel-simulator:
+    nos3-css-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
         network_mode: host
         image: nos3
-        command: $SIM_BIN/nos3-generic-reactionwheel-simulator
+        command: $SIM_BIN/nos3-generic-css-simulator
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-eps-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-generic-eps-simulator
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-fss-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-single-simulator generic-fss-sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-imu-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-generic-imu-simulator
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     nos3-gps-simulator:
@@ -60,6 +104,30 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-gps-simulator
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-radio-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-generic-radio-simulator
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-generic-reactionwheel-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-generic-reactionwheel-simulator
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     nos3-sample-simulator:
@@ -69,6 +137,19 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-sample-simulator
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-torquer-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        network_mode: host
+        image: nos3
+        command: $SIM_BIN/nos3-generic-torquer-simulator
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     truth42sim:
@@ -78,6 +159,8 @@ services:
         image: nos3
         command: $SIM_BIN/nos3-single-simulator truth42sim
         working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
         depends_on:
             - nos_engine_server_standalone
     fsw:
@@ -90,12 +173,12 @@ services:
         stdin_open: true
         tty: true
         sysctls:
-            - fs.mqueue.msg_max=500
+            - fs.mqueue.msg_max=1500
         depends_on:
             - nos_engine_server_standalone
     fortytwo:
         volumes:
-            - '/opt/nos3/42:/opt/nos3/42'
+            - '/opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut'
             - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
         network_mode: host
         image: nos3

@@ -26,6 +26,9 @@ for i in $(docker container ls -q); do
 done
 docker container prune -f
 
+docker network rm SC01
+docker network rm SC02
+
 # 42
 rm -rf /opt/nos3/42/NOS3InOut
 rm -rf /tmp/gpio*
