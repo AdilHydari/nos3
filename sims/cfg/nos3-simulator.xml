@@ -152,7 +152,8 @@
                 </connections>
                 <data-provider>               
                     <type>GPS42SOCKET</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>4245</port>
                     <max-connection-attempts>5</max-connection-attempts>
                     <retry-wait-seconds>5</retry-wait-seconds>
@@ -281,7 +282,8 @@
                 </connections>
                 <data-provider>               
                     <type>GENERICRWSIMDATA42SOCKETPROVIDER</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>4277</port>
                     <command-port>4278</command-port>
                     <max-connection-attempts>5</max-connection-attempts>
@@ -306,7 +308,8 @@
                 </connections>
                 <data-provider>               
                     <type>GENERIC_CSS_42_PROVIDER</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>4227</port>
                     <max-connection-attempts>5</max-connection-attempts>
                     <retry-wait-seconds>5</retry-wait-seconds>
@@ -362,7 +365,8 @@
                 </connections>
                 <data-provider>
                     <type>TRUTH42PROVIDER</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>9999</port>
                     <max-connection-attempts>10</max-connection-attempts>
                     <orbit>0</orbit>
@@ -385,7 +389,8 @@
                 </connections>
                 <data-provider>               
                     <type>GENERIC_FSS_42_PROVIDER</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>4279</port>
                     <max-connection-attempts>5</max-connection-attempts>
                     <retry-wait-seconds>5</retry-wait-seconds>
@@ -455,7 +460,8 @@
                 </connections>
                 <data-provider>
                     <type>GENERIC_IMU_42_PROVIDER</type>
-                    <hostname>localhost</hostname>
+                    <hostname>0.0.0.0</hostname>
+                    <!-- hostname>localhost</hostname -->
                     <port>4280</port>
                     <max-connection-attempts>5</max-connection-attempts>
                     <retry-wait-seconds>5</retry-wait-seconds>
