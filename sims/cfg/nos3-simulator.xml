@@ -10,7 +10,8 @@
         <absolute-start-time>814048200.0</absolute-start-time>
         <sim-microseconds-per-tick>10000</sim-microseconds-per-tick>
 		<real-microseconds-per-tick>10000</real-microseconds-per-tick>
-        <nos-connection-string>tcp://0.0.0.0:12001</nos-connection-string>
+        <nos-connection-string>tcp://nos_engine_server:12001</nos-connection-string>
+        <!--nos-connection-string>tcp://0.0.0.0:12001</nos-connection-string-->
     </common>
 
     <simulators>
