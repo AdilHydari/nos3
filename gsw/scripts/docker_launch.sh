@@ -39,7 +39,7 @@ cd /opt/nos3/42/
 rm -rf NOS3InOut
 cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
 xhost +local:*
-gnome-terminal --tab --title="42" -- docker run -it -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --network=SC01 -w /opt/nos3/42 -t nos3 /opt/nos3/42/42 NOS3InOut
+gnome-terminal --tab --title="42" -- docker run -it -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo --network=SC01 -w /opt/nos3/42 -t nos3 /opt/nos3/42/42 NOS3InOut
 echo ""
 
 echo "Simulators..."
