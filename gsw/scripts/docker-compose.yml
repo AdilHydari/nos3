@@ -3,18 +3,24 @@ services:
     nos_engine_server_standalone:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
         image: nos3
         command: /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+        networks:
+            satnet:
+                aliases:
+                    - nos_engine_server
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
     nos-time-driver:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
         image: nos3
         command: $SIM_BIN/nos3-single-simulator time
+        networks:
+            satnet:
+                aliases:
+                    - nos_time_driver
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
@@ -23,9 +29,12 @@ services:
     nos3-simulator-terminal:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
         image: nos3
         command: $SIM_BIN/nos3-single-simulator stdio-terminal
+        networks:
+            satnet:
+                aliases:
+                    - nos_terminal
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
@@ -34,97 +43,12 @@ services:
     nos3-simulator-udp-terminal:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
         image: nos3
         command: $SIM_BIN/nos3-single-simulator udp-terminal
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-cam-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-cam-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-css-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-css-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-eps-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-eps-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-fss-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-single-simulator generic-fss-sim
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-imu-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-imu-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-gps-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-gps-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-radio-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-radio-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-generic-reactionwheel-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-reactionwheel-simulator
+        networks:
+            satnet:
+                aliases:
+                    - nos_udp_terminal
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
@@ -133,31 +57,12 @@ services:
     nos3-sample-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
         image: nos3
         command: $SIM_BIN/nos3-sample-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    nos3-torquer-simulator:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-generic-torquer-simulator
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
-        depends_on:
-            - nos_engine_server_standalone
-    truth42sim:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        network_mode: host
-        image: nos3
-        command: $SIM_BIN/nos3-single-simulator truth42sim
+        networks:
+            satnet:
+                aliases:
+                    - sample_sim
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
@@ -166,9 +71,12 @@ services:
     fsw:
         volumes:
             - '$FSW_BIN:$FSW_BIN'
-        network_mode: host
         image: nos3
         command: $FSW_BIN/core-cpu1 -R PO
+        networks:
+            satnet:
+                aliases:
+                    - nos-fsw
         working_dir: $FSW_BIN
         stdin_open: true
         tty: true
@@ -180,9 +88,12 @@ services:
         volumes:
             - '/opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut'
             - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
-        network_mode: host
         image: nos3
         command: /opt/nos3/42/42 NOS3InOut
+        networks:
+            satnet:
+                aliases:
+                    - fortytwo
         working_dir: /opt/nos3/42
         tty: true
         environment:
@@ -194,11 +105,19 @@ services:
             - '$SCRIPT_DIR/../cosmos:/cosmos/cosmos'
             - '$SCRIPT_DIR/../../components/:/COMPONENTS'
             - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
-        network_mode: host
         image: ballaerospace/cosmos
         command: /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+        networks:
+            satnet:
+                aliases:
+                    - cosmos
         working_dir: /cosmos/cosmos
         tty: true
         environment:
             - DISPLAY=$DISPLAY
             - QT_X11_NO_MITSHM=1
+
+networks:
+    satnet:
+
+

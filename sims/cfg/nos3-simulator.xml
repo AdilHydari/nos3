@@ -134,13 +134,13 @@
                     </connection>
                 </connections>
                 <data-provider>
-                    <type>SAMPLE_PROVIDER</type>
-                    <!-- type>SAMPLE_42_PROVIDER</type>
+                    <!-- type>SAMPLE_PROVIDER</type -->
+                    <type>SAMPLE_42_PROVIDER</type>
                     <hostname>fortytwo</hostname>
                     <port>4242</port>
                     <max-connection-attempts>5</max-connection-attempts>
                     <retry-wait-seconds>5</retry-wait-seconds>
-                    <spacecraft>0</spacecraft -->
+                    <spacecraft>0</spacecraft>
                 </data-provider>
             </hardware-model>
         </simulator>
@@ -372,7 +372,7 @@
                 </connections>
                 <data-provider>
                     <type>TRUTH42PROVIDER</type>
-                    <hostname>0.0.0.0</hostname>
+                    <hostname>fortytwo</hostname>
                     <!-- hostname>localhost</hostname -->
                     <port>9999</port>
                     <max-connection-attempts>10</max-connection-attempts>
@@ -419,19 +419,19 @@
                     </connection>
                     <connection>
                         <name>fsw</name>
-                        <ip>0.0.0.0</ip>
+                        <ip>nos-fsw</ip>
                         <ci-port>5010</ci-port>
                         <to-port>5011</to-port>
                         <radio-port>5015</radio-port>
                     </connection>
                     <connection>
                         <name>radio</name>
-                        <ip>0.0.0.0</ip>
+                        <ip>radio_sim</ip>
                         <cmd-port>5014</cmd-port>
                     </connection>
                     <connection>
                         <name>gsw</name>
-                        <ip>0.0.0.0</ip>
+                        <ip>cosmos</ip>
                         <cmd-port>6010</cmd-port>
                         <tlm-port>6011</tlm-port>
                     </connection>

@@ -40,5 +40,24 @@ export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
 #    -v /home/nos3/Desktop/github-nos3/components/:/COMPONENTS -w /cosmos/cosmos -d --network=host \
 #    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
+# Probably, when it comes time to launch multiple spacecraft, the below (docker compose
+# up) will be enclosed in a loop and the flag -p used to set the project name. The size 
+# of the loop will determine the number of spacecraft to use, and the names will be set
+# to iterate in some kind of an "echo" statement (that is my guess, at least). 
+
+# This is probably where I will create (1) the overarching network and (2) the COSMOS 
+# container. Then I will add the COSMOS container to every one of the other networks
+# in the below loop. Consider naming the network SC00 or something fairly general/
+# universal.
+
+export SATNUM=10
+for (( i=1; i<=$SATNUM; i++ ))
+do
+    export NETNAME="SC"$i
+    echo $NETNAME
+    #THIS IS WHERE THE DOCKER_COMPOSE STUFF WILL BE PLACED,
+    #ONCE I HAVE IT ALL SET UP PROPERLY
+done
+
 cd $SCRIPT_DIR
 docker-compose up -d
