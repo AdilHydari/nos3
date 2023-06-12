@@ -11,7 +11,6 @@
         <sim-microseconds-per-tick>10000</sim-microseconds-per-tick>
 		<real-microseconds-per-tick>10000</real-microseconds-per-tick>
         <nos-connection-string>tcp://nos_engine_server:12001</nos-connection-string>
-        <!--nos-connection-string>tcp://0.0.0.0:12001</nos-connection-string-->
     </common>
 
     <simulators>
@@ -437,7 +436,7 @@
                     </connection>
                     <connection>
                         <name>prox</name>
-                        <ip>0.0.0.0</ip>
+                        <ip>radio_sim</ip>
                         <rcv-port>7012</rcv-port>
                         <fsw-port>7010</fsw-port>
                         <fwd-port>7011</fdw-port>
