@@ -54,6 +54,20 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+    nos3-radio-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-generic-radio-simulator
+        networks:
+            satnet:
+                aliases:
+                    - radio_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
     nos3-sample-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
