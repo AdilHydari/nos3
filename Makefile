@@ -83,7 +83,8 @@ gsw:
 	./gsw/scripts/gsw.sh
 
 launch:
-	./gsw/scripts/launch.sh
+	#./gsw/scripts/launch.sh
+	./gsw/scripts/docker_launch.sh
 
 log:
 	./gsw/scripts/log.sh
@@ -96,4 +97,5 @@ sc-launch:
 	./gsw/scripts/sc_launch.sh
 
 stop:
-	./gsw/scripts/stop.sh
+	#./gsw/scripts/stop.sh
+	./gsw/scripts/docker_stop.sh
