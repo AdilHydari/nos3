@@ -1,5 +1,5 @@
 <<<<<<<<<<<<<<< 42: InterProcess Comm Configuration File >>>>>>>>>>>>>>>>
-2                                       ! Number of Sockets
+10                                      ! Number of Sockets
 **********************************  IPC 0   *****************************
 TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
 0                                       ! AC.ID for ACS mode
@@ -10,6 +10,56 @@ FALSE                                   ! Allow Blocking (i.e. wait on RX)
 FALSE                                   ! Echo to stdout
 1                                       ! Number of TX prefixes
 "SC"                                    ! Prefix 0
+**********************************  IPC 1   *****************************
+RX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+0                                       ! AC.ID for ACS mode
+"State01.42"                            ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4278                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0
+**********************************  IPC 2   *****************************
+TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+1                                       ! AC.ID for ACS mode
+"State02.42"                            ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4277                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0
+**********************************  IPC 3   *****************************
+RX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+1                                       ! AC.ID for ACS mode
+"Torquer.Rx"                            ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4279                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0
+**********************************  IPC 4   *****************************
+TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+0                                       ! AC.ID for ACS mode
+"State03.42"                            ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4245                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0
+**********************************  CSS     *****************************
+TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+0                                       ! AC.ID for ACS mode
+"State04.42"                            ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4227                     ! Server Host Name, Port
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC[0].AC.CSS"                          ! Prefix 0
 **********************************  Truth data to sim to pass to COSMOS ********************
 TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
 0                                       ! AC.ID for ACS mode
@@ -42,4 +92,23 @@ FALSE                                   ! Echo to stdout
 "SC[0].Hvb"                             ! Prefix 4
 "SC[0].B[0]"                            ! Prefix 5
 "Orb"                                   ! Prefix 6
-
+**********************************  IPC 3   *****************************
+TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+0                                       ! AC.ID for ACS mode
+"FSS.42"                                ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4279                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0
+**********************************  GENERIC_IMU   *****************************
+TX                                      ! IPC Mode (OFF,TX,RX,TXRX,ACS,WRITEFILE,READFILE)
+0                                       ! AC.ID for ACS mode
+"IMU.42"                                ! File name for WRITE or READ
+SERVER                                  ! Socket Role (SERVER,CLIENT,GMSEC_CLIENT)
+fortytwo       4280                     ! Server Host Name, Port 
+FALSE                                   ! Allow Blocking (i.e. wait on RX)
+FALSE                                   ! Echo to stdout
+1                                       ! Number of TX prefixes
+"SC"                                    ! Prefix 0

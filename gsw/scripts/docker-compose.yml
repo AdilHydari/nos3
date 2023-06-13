@@ -54,6 +54,90 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+    nos3-cam-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-cam-simulator
+        networks:
+            satnet:
+                aliases:
+                    - cam_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-css-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-generic-css-simulator
+        networks:
+            satnet:
+                aliases:
+                    - css_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-eps-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-generic-eps-simulator
+        networks:
+            satnet:
+                aliases:
+                    - eps_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-fss-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-single-simulator generic-fss-sim
+        networks:
+            satnet:
+                aliases:
+                    - fss_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-imu-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-generic-imu-simulator
+        networks:
+            satnet:
+                aliases:
+                    - imu_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-gps-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-gps-simulator
+        networks:
+            satnet:
+                aliases:
+                    - gps_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
     nos3-radio-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -68,6 +152,21 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+    nos3-rw-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-generic-reactionwheel-simulator
+        networks:
+            satnet:
+                aliases:
+                    - rw_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+
     nos3-sample-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -77,6 +176,20 @@ services:
             satnet:
                 aliases:
                     - sample_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
+    nos3-fortytwo-truth-sim:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: nos3
+        command: $SIM_BIN/nos3-single-simulator truth42sim
+        networks:
+            satnet:
+                aliases:
+                    - truth42sim
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true

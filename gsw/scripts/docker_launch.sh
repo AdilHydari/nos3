@@ -74,18 +74,17 @@ gnome-terminal --tab --title="NOS Engine Server" -- docker run --rm -it -v $SIM_
 gnome-terminal --tab --title="NOS Time Driver" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator time
 gnome-terminal --tab --title='NOS Terminal' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name nos_terminal --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
 gnome-terminal --tab --title='NOS UDP Terminal' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator udp-terminal
-#gnome-terminal --tab --title='CAM Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-cam-simulator
-#gnome-terminal --tab --title='CSS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-css-simulator
-#gnome-terminal --tab --title='EPS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-eps-simulator
-#gnome-terminal --tab --title="FSS Sim" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
-#gnome-terminal --tab --title='IMU Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-imu-simulator
-#gnome-terminal --tab --title='GPS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-gps-simulator
+gnome-terminal --tab --title='CAM Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name cam_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-cam-simulator
+gnome-terminal --tab --title='CSS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name css_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-css-simulator
+gnome-terminal --tab --title='EPS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name eps_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-eps-simulator
+gnome-terminal --tab --title="FSS Sim" -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name fss_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
+gnome-terminal --tab --title='IMU Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name imu_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-imu-simulator
+gnome-terminal --tab --title='GPS Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name gps_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-gps-simulator
 gnome-terminal --tab --title='Radio Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name radio_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-radio-simulator
-#gnome-terminal --tab --title='RW Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
-
+gnome-terminal --tab --title='RW Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name rw_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
 gnome-terminal --tab --title='Sample Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name sample_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-sample-simulator
+gnome-terminal --tab --title='Torquer Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name torquer_sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-torquer-simulator
 
-#gnome-terminal --tab --title='Torquer Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-generic-torquer-simulator
 #gnome-terminal --tab --title="42" -- docker run -it -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo2 --network=SC02 -w /opt/nos3/42 -t nos3 /opt/nos3/42/42 NOS3InOut
 
 gnome-terminal --tab --title='42 Truth Sim' -- docker run --rm -it -v $SIM_DIR:$SIM_DIR --name truth42sim --network=SC01 -w $SIM_BIN nos3 $SIM_BIN/nos3-single-simulator truth42sim
