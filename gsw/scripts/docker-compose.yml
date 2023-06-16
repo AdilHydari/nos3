@@ -166,7 +166,6 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
-
     nos3-sample-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
