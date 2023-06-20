@@ -414,7 +414,7 @@
                     </connection>
                     <connection>
                         <name>fsw</name>
-                        <ip>nos_engine_server</ip>
+                        <ip>nos-fsw</ip>
                         <ci-port>5010</ci-port>
                         <to-port>5011</to-port>
                         <radio-port>5015</radio-port>
