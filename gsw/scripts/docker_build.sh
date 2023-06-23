@@ -8,4 +8,4 @@
 SCRIPT_DIR=$(cd `dirname $0` && pwd)
 BASE_DIR=$(cd `dirname $SCRIPT_DIR`/.. && pwd)
 
-docker run --rm -v $BASE_DIR:$BASE_DIR -w $BASE_DIR -it nos3 make clean all
+docker run --rm -v $BASE_DIR:$BASE_DIR -w $BASE_DIR -it ivvitc/nos3 make
