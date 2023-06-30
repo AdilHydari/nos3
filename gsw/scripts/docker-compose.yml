@@ -3,7 +3,7 @@ services:
     nos_engine_server_standalone:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
         networks:
             satnet:
@@ -12,24 +12,12 @@ services:
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
-    nos-time-driver:
-        volumes:
-            - '$SIM_DIR:$SIM_DIR'
-        image: nos3
-        command: $SIM_BIN/nos3-single-simulator time
-        networks:
-            satnet:
-                aliases:
-                    - nos_time_driver
-        working_dir: $SIM_BIN
-        stdin_open: true
-        tty: true
         depends_on:
-            - nos_engine_server_standalone
+            - fortytwo
     nos3-simulator-terminal:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-single-simulator stdio-terminal
         networks:
             satnet:
@@ -43,7 +31,7 @@ services:
     nos3-simulator-udp-terminal:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-single-simulator udp-terminal
         networks:
             satnet:
@@ -57,7 +45,7 @@ services:
     nos3-cam-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-cam-simulator
         networks:
             satnet:
@@ -71,7 +59,7 @@ services:
     nos3-css-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-generic-css-simulator
         networks:
             satnet:
@@ -85,7 +73,7 @@ services:
     nos3-eps-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-generic-eps-simulator
         networks:
             satnet:
@@ -99,7 +87,7 @@ services:
     nos3-fss-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-single-simulator generic-fss-sim
         networks:
             satnet:
@@ -113,7 +101,7 @@ services:
     nos3-imu-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-generic-imu-simulator
         networks:
             satnet:
@@ -127,7 +115,7 @@ services:
     nos3-gps-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-gps-simulator
         networks:
             satnet:
@@ -141,7 +129,7 @@ services:
     nos3-radio-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-generic-radio-simulator
         networks:
             satnet:
@@ -155,7 +143,7 @@ services:
     nos3-rw-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-generic-reactionwheel-simulator
         networks:
             satnet:
@@ -169,7 +157,7 @@ services:
     nos3-sample-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-sample-simulator
         networks:
             satnet:
@@ -180,10 +168,24 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+    nos3-generic-torquer-simulator:
+        volumes:
+            - '$SIM_DIR:$SIM_DIR'
+        image: ivvitc/nos3
+        command: $SIM_BIN/nos3-generic-torquer-simulator
+        networks:
+            satnet:
+                aliases:
+                    - torquer_sim
+        working_dir: $SIM_BIN
+        stdin_open: true
+        tty: true
+        depends_on:
+            - nos_engine_server_standalone
     nos3-fortytwo-truth-sim:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
-        image: nos3
+        image: ivvitc/nos3
         command: $SIM_BIN/nos3-single-simulator truth42sim
         networks:
             satnet:
@@ -196,14 +198,14 @@ services:
             - nos_engine_server_standalone
     fsw:
         volumes:
-            - '$FSW_BIN:$FSW_BIN'
-        image: nos3
-        command: $FSW_BIN/core-cpu1 -R PO
+            - '$FSW_DIR:$FSW_DIR'
+        image: ivvitc/nos3
+        command: $FSW_DIR/core-cpu1 -R PO
         networks:
             satnet:
                 aliases:
                     - nos-fsw
-        working_dir: $FSW_BIN
+        working_dir: $FSW_DIR
         stdin_open: true
         tty: true
         sysctls:
@@ -225,26 +227,7 @@ services:
         tty: true
         environment:
             - DISPLAY=$DISPLAY
-        depends_on:
-            - nos_engine_server_standalone
-    cosmos:
-        volumes:
-            - '$SCRIPT_DIR/../cosmos:/cosmos/cosmos'
-            - '$SCRIPT_DIR/../../components/:/COMPONENTS'
-            - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
-        image: ballaerospace/cosmos
-        command: /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
-        networks:
-            satnet:
-                aliases:
-                    - cosmos
-        working_dir: /cosmos/cosmos
-        tty: true
-        environment:
-            - DISPLAY=$DISPLAY
-            - QT_X11_NO_MITSHM=1
 
 networks:
     satnet:
-
 
