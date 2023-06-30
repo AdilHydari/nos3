@@ -84,13 +84,17 @@ for (( i=1; i<=$SATNUM; i++ ))
 do
     export PROJNAME="sc_"$i
     export NETNAME="sc_"$i"_satnet"
-##    export FORTYTWONAME="fortytwo"$i
     echo $PROJNAME
-##    echo $FORTYTWONAME
-##   gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $FORTYTWONAME --network=NOS3_GC -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut 
+##    export FORTYTWONAME="fortytwo"$i
+##    gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $FORTYTWONAME --network=NOS3_GC -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut 
+    export FSWNAME="nos_fsw"$i
+#    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw --network=NOS3_GC -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+    sleep 1
     docker network create $NETNAME
 ##    docker network connect --alias fortytwo $NETNAME $FORTYTWONAME
     docker network connect --alias cosmos $NETNAME cosmos
+    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw --network=$NETNAME --network-alias=[nos-fsw] -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+#    docker network connect --alias nos-fsw $NETNAME $FSWNAME
     # The below, when uncommented, will create a number of satellites equal to $SATNUM.
     # Each one will be prefixed with the name "sc_", followed by the number of the
     # satellite in order. 
