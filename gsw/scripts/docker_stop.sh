@@ -35,6 +35,7 @@ $DFLAG network rm SC01 > /dev/null 2>&1
 $DFLAG network rm NOS3_GC > /dev/null 2>&1
 $DFLAG network rm sc_1_satnet > /dev/null 2>&1
 $DFLAG network rm sc_2_satnet > /dev/null 2>&1
+$DFLAG network rm sc_3_satnet > /dev/null 2>&1
 
 # 42
 rm -rf /opt/nos3/42/NOS3InOut

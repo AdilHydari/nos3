@@ -12,8 +12,6 @@ services:
         working_dir: $SIM_BIN
         stdin_open: true
         tty: true
-        depends_on:
-            - fortytwo
     nos-time-driver:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -210,21 +208,6 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
-    fortytwo:
-        volumes:
-            - '/opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut'
-            - '/tmp/.X11-unix:/tmp/.X11-unix:ro'
-        image: nos3
-        command: /opt/nos3/42/42 NOS3InOut
-        networks:
-            satnet:
-                aliases:
-                    - fortytwo
-        working_dir: /opt/nos3/42
-        stdin_open: true
-        tty: true
-        environment:
-            - DISPLAY=$DISPLAY
 
 networks:
     satnet:

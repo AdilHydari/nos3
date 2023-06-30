@@ -432,7 +432,7 @@
                     </connection>
                     <connection>
                         <name>prox</name>
-                        <ip>radio_sim</ip>
+                        <ip>next_radio</ip>
                         <rcv-port>7012</rcv-port>
                         <fsw-port>7010</fsw-port>
                         <fwd-port>7011</fdw-port>
