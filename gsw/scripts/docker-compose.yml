@@ -82,6 +82,7 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+            - nos3-gps-simulator
     nos3-eps-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -124,6 +125,7 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+            - nos3-fortytwo-truth-sim
     nos3-gps-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -138,6 +140,7 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+            - nos3-generic-torquer-simulator
     nos3-radio-simulator:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -194,6 +197,7 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+            - nos3-rw-simulator
     nos3-fortytwo-truth-sim:
         volumes:
             - '$SIM_DIR:$SIM_DIR'
@@ -208,6 +212,7 @@ services:
         tty: true
         depends_on:
             - nos_engine_server_standalone
+            - nos3-css-simulator
 
 networks:
     satnet:

@@ -79,7 +79,7 @@ $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_
 
 cd $SCRIPT_DIR
 
-export SATNUM=2
+export SATNUM=3
 for (( i=1; i<=$SATNUM; i++ ))
 do
     export PROJNAME="sc_"$i
@@ -90,9 +90,9 @@ do
     docker network create $NETNAME
     gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $FORTYTWONAME --network=$NETNAME --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut 
     docker network connect --alias cosmos $NETNAME cosmos
-    sleep 3
+    sleep 5
     gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw --network=$NETNAME --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
-    sleep 3
+#    sleep 5
     # The below, when uncommented, will create a number of satellites equal to $SATNUM.
     # Each one will be prefixed with the name "sc_", followed by the number of the
     # satellite in order. 
@@ -106,8 +106,12 @@ do
         export PRENETNAME="sc_"$j"_satnet"
         docker network connect --alias next_radio $PRENETNAME $RADNAME
     fi
- 
+
+
 done
+
+export LASTNETNAME="sc_"$SATNUM"_satnet"
+docker network connect --alias next_radio $LASTNETNAME sc_1_nos3-radio-simulator_1
 
 #gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver   --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
 #docker network connect --alias nos_time_driver sc_1_satnet nos_time_driver
