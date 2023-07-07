@@ -27,6 +27,23 @@
                         <bus-name>command</bus-name>
                         <node-name>time-driver</node-name>
                     </connection>
+                    <!-- Something here is going to need changing; I am not quite sure what the value of nos-connection-string-override 
+                    should be. My two guesses are the radio or else the time driver, though I am leaning towards the radio (and not the 
+                    time driver) at present. Also, apparently I have to (probably) hardcode the radio simulators. -->
+                    <!--
+                    <connection>
+                        <type>time</type>
+                        <nos-connection-string-override>tcp://radio_sim1:12001</nos-connection-string-override>
+                        <bus-name>command</bus-name>
+                        <node-name>sc1-time-driver</node-name>
+                    </connection>
+                    <connection>
+                        <type>time</type>
+                        <nos-connection-string-override>tcp://radio_sim2:12001</nos-connection-string-override>
+                        <bus-name>command</bus-name>
+                        <node-name>sc2-time-driver</node-name>
+                    </connection>
+                    -->
                     <!--
                     <connection>
                         <type>time</type>
@@ -56,14 +73,16 @@
                     <suppress-output>false</suppress-output> <!-- should output from bus be sent back to STDOUT/UDP client? -->
                 </terminal>
                 <other-nos-connections>
-                    <!-- <nos-connection>
+                    <!-- 
+                    <nos-connection>
                         <name>sc1</name>
-                        <connection-string>tcp://10.10.10.101:12001</connection-string>
+                        <connection-string>tcp://radio_sim1:12001</connection-string>
                     </nos-connection>
                     <nos-connection>
                         <name>sc2</name>
-                        <connection-string>tcp://10.10.10.102:12001</connection-string>
-                    </nos-connection> -->
+                        <connection-string>tcp://radio_sim2:12001</connection-string>
+                    </nos-connection> 
+                    -->
                 </other-nos-connections>
                 <bus>
                     <name>command</name>
@@ -92,14 +111,16 @@
                     <suppress-output>false</suppress-output> <!-- should output from bus be sent back to STDOUT/UDP client? -->
                 </terminal>
                 <other-nos-connections>
-                    <!-- <nos-connection>
+                    <!--
+                    <nos-connection>
                         <name>sc1</name>
-                        <connection-string>tcp://10.10.10.101:12001</connection-string>
+                        <connection-string>tcp://radio_sim1:12001</connection-string>
                     </nos-connection>
                     <nos-connection>
                         <name>sc2</name>
-                        <connection-string>tcp://10.10.10.102:12001</connection-string>
-                    </nos-connection> -->
+                        <connection-string>tcp://radio_sim2:12001</connection-string>
+                    </nos-connection> 
+                    -->
                 </other-nos-connections>
                 <bus>
                     <name>command</name>

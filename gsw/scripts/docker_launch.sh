@@ -83,66 +83,125 @@ echo "COSMOS Ground Station..."
 cd $BASE_DIR/gsw/cosmos
 export MISSION_NAME=$(echo "NOS3")
 export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+#$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+#    --volume $GSW_DIR:/cosmos/cosmos \
+#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_gc --network=NOS3_GC \
+#    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+#docker network connect --alias cosmos sc_1_satnet cosmos_gc
+#$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+#    --volume $GSW_DIR:/cosmos/cosmos \
+#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_gc2 --network=NOS3_GC \
+#    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+#docker network connect --alias cosmos sc_2_satnet cosmos_gc2
 $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
     --volume $GSW_DIR:/cosmos/cosmos \
-    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_gc --network=NOS3_GC \
+    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_1 --network=sc_1_satnet --network-alias=cosmos \
     ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
-docker network connect --alias cosmos sc_1_satnet cosmos_gc
-docker network connect --alias cosmos sc_2_satnet cosmos_gc
+
+#$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+#    --volume $GSW_DIR:/cosmos/cosmos \
+#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_2 --network=sc_2_satnet --network-alias=cosmos \
+#    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+
+
 echo ""
 
-echo "Flight Software..."
-cd $FSW_DIR
-gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name nos-fsw1 -h nos-fsw --network=sc_1_satnet --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
-gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name nos-fsw2 -h nos-fsw --network=sc_2_satnet --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+export SATNUM=2
+for (( i=1; i<=$SATNUM; i++ ))
+do
+    export PROJNAME="sc_"$i
+    export NETNAME="sc_"$i"_satnet"
+
+    echo "Flight Software..."
+    cd $FSW_DIR
+    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name "nos-fsw"$i -h nos-fsw --network=$NETNAME --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+   
+    echo ""
+
+    echo "Simulators..."
+    cd $SIM_BIN
+    gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_engine_server"$i -h nos_engine_server --network=$NETNAME --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+    gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "truth42sim"$i        --network=$NETNAME --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
+    gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "cam_sim"$i           --network=$NETNAME --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
+    gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "css_sim"$i           --network=$NETNAME --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
+    gnome-terminal --tab --title='EPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "eps_sim"$i           --network=$NETNAME --network-alias=eps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-eps-simulator
+    gnome-terminal --tab --title="FSS Sim"           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "fss_sim"$i           --network=$NETNAME --network-alias=fss_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
+    gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "imu_sim"$i           --network=$NETNAME --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
+    gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "gps_sim"$i           --network=$NETNAME --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
+    gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "rw_sim"$i            --network=$NETNAME --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
+    gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "radio_sim"$i         --network=$NETNAME --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
+    gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sample_sim"$i        --network=$NETNAME --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
+    gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "torquer_sim"$i       --network=$NETNAME --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
+    gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_terminal"$i      --network=$NETNAME --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
+    gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_udp_terminal"$i  --network=$NETNAME --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
+
+    sleep 5
+    gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_time_driver"$i   --network=$NETNAME --network-alias=nos_time_driver -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+
+    if [ $i -ge 2 ]; then
+        let j=($i-1)
+        # The below defines the radio container name and the previous network
+        # name; then, the current radio is connected to the previous network under
+        # the alias "next_radio". 
+        export RADNAME="radio_sim"$i
+        export PRENETNAME="sc_"$j"_satnet"
+        docker network connect --alias next_radio $PRENETNAME $RADNAME
+    fi
+
+done
+
+docker network connect --alias next_radio "sc_"$SATNUM"_satnet" radio_sim1
+
+#echo "Flight Software..."
+#cd $FSW_DIR
+#gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name nos-fsw1 -h nos-fsw --network=sc_1_satnet --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+#gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name nos-fsw2 -h nos-fsw --network=sc_2_satnet --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
 # Note: Can keep open if desired after a new gnome-profile is manually created
 #gnome-terminal --title="NOS3 Flight Software" --window-with-profile=KeepOpen -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name nos-fsw -h nos-fsw --network=sc_1_satnet -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
-echo ""
+#echo ""
+#
+#echo "Simulators..."
+#cd $SIM_BIN
+#gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_engine_server1 -h nos_engine_server --network=sc_1_satnet --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+#gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name truth42sim1        --network=sc_1_satnet --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
+#gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name cam_sim1           --network=sc_1_satnet --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
+#gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name css_sim1           --network=sc_1_satnet --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
+#gnome-terminal --tab --title='EPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name eps_sim1           --network=sc_1_satnet --network-alias=eps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-eps-simulator
+#gnome-terminal --tab --title="FSS Sim"           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name fss_sim1           --network=sc_1_satnet --network-alias=fss_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
+#gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name imu_sim1           --network=sc_1_satnet --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
+#gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name gps_sim1           --network=sc_1_satnet --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
+#gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name rw_sim1            --network=sc_1_satnet --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
+#gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name radio_sim1         --network=sc_1_satnet --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
+#gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name sample_sim1        --network=sc_1_satnet --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
+#gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name torquer_sim1       --network=sc_1_satnet --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
+#gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_terminal1      --network=sc_1_satnet --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
+#gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal1  --network=sc_1_satnet --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
+#docker network connect --alias next_radio sc_2_satnet radio_sim1
+#
+#
+#gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_engine_server2 -h nos_engine_server --network=sc_2_satnet --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+#gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name truth42sim2        --network=sc_2_satnet --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
+#gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name cam_sim2           --network=sc_2_satnet --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
+#gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name css_sim2           --network=sc_2_satnet --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
+#gnome-terminal --tab --title='EPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name eps_sim2           --network=sc_2_satnet --network-alias=eps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-eps-simulator
+#gnome-terminal --tab --title="FSS Sim"           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name fss_sim2           --network=sc_2_satnet --network-alias=fss_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
+#gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name imu_sim2           --network=sc_2_satnet --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
+#gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name gps_sim2           --network=sc_2_satnet --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
+#gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name rw_sim2            --network=sc_2_satnet --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
+#gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name radio_sim2         --network=sc_2_satnet --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
+#gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name sample_sim2        --network=sc_2_satnet --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
+#gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name torquer_sim2       --network=sc_2_satnet --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
+#gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_terminal2      --network=sc_2_satnet --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
+#gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal2  --network=sc_2_satnet --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
+#
+#docker network connect --alias next_radio sc_1_satnet radio_sim2
+#
+#sleep 5
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver1 --network=sc_1_satnet --network-alias=nos_time_driver -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver2 --network=sc_2_satnet --network-alias=nos_time_driver -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
 
-echo "Simulators..."
-cd $SIM_BIN
-gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_engine_server1 -h nos_engine_server --network=sc_1_satnet --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
-gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name truth42sim1        --network=sc_1_satnet --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
-gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name cam_sim1           --network=sc_1_satnet --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
-gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name css_sim1           --network=sc_1_satnet --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
-gnome-terminal --tab --title='EPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name eps_sim1           --network=sc_1_satnet --network-alias=eps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-eps-simulator
-gnome-terminal --tab --title="FSS Sim"           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name fss_sim1           --network=sc_1_satnet --network-alias=fss_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
-gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name imu_sim1           --network=sc_1_satnet --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
-gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name gps_sim1           --network=sc_1_satnet --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
-gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name rw_sim1            --network=sc_1_satnet --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
-gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name radio_sim1         --network=sc_1_satnet --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
-gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name sample_sim1        --network=sc_1_satnet --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
-gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name torquer_sim1       --network=sc_1_satnet --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
-gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_terminal1   --network=sc_1_satnet --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
-gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal1  --network=sc_1_satnet --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
-docker network connect --alias next_radio sc_2_satnet radio_sim1
-
-
-gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_engine_server2 -h nos_engine_server --network=sc_2_satnet --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
-gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name truth42sim2        --network=sc_2_satnet --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
-gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name cam_sim2           --network=sc_2_satnet --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
-gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name css_sim2           --network=sc_2_satnet --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
-gnome-terminal --tab --title='EPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name eps_sim2           --network=sc_2_satnet --network-alias=eps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-eps-simulator
-gnome-terminal --tab --title="FSS Sim"           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name fss_sim2           --network=sc_2_satnet --network-alias=fss_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator generic-fss-sim
-gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name imu_sim2           --network=sc_2_satnet --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
-gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name gps_sim2           --network=sc_2_satnet --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
-gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name rw_sim2            --network=sc_2_satnet --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
-gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name radio_sim2         --network=sc_2_satnet --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
-gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name sample_sim2        --network=sc_2_satnet --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
-gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name torquer_sim2       --network=sc_2_satnet --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
-gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_terminal2   --network=sc_2_satnet --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
-gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal2  --network=sc_2_satnet --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
-docker network connect --alias next_radio sc_1_satnet radio_sim2
-
-sleep 5
-#gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_terminal_gc   --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
-#gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_udp_terminal_gc  --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
-#docker network connect --alias nos_terminal sc_1_satnet nos_terminal_gc
-#docker network connect --alias nos_terminal sc_2_satnet nos_terminal_gc
-#docker network connect --alias nos_terminal sc_1_satnet nos_udp_terminal_gc
-#docker network connect --alias nos_terminal sc_2_satnet nos_udp_terminal_gc
-gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver_gc --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
-docker network connect --alias nos_time_driver sc_1_satnet nos_time_driver_gc
-docker network connect --alias nos_time_driver sc_2_satnet nos_time_driver_gc
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver_gc --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#docker network connect --alias nos_time_driver sc_1_satnet nos_time_driver_gc
+#docker network connect --alias nos_time_driver sc_2_satnet nos_time_driver_gc
 echo ""
 

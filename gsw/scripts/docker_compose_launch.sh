@@ -63,14 +63,14 @@ cd /opt/nos3/42/
 rm -rf NOS3InOut
 cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
 
-echo "COSMOS Ground Station..."
-cd $BASE_DIR/gsw/cosmos
-export MISSION_NAME=$(echo "NOS3")
-export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
-$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
-    --volume $GSW_DIR:/cosmos/cosmos \
-    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos --network=NOS3_GC \
-    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+#echo "COSMOS Ground Station..."
+#cd $BASE_DIR/gsw/cosmos
+#export MISSION_NAME=$(echo "NOS3")
+#export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+#$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+#    --volume $GSW_DIR:/cosmos/cosmos \
+#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos --network=NOS3_GC \
+#    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
 # This is probably where I will create (1) the overarching network and (2) the COSMOS 
 # container. Then I will add the COSMOS container to every one of the other networks
@@ -79,7 +79,7 @@ $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_
 
 cd $SCRIPT_DIR
 
-export SATNUM=3
+export SATNUM=2
 for (( i=1; i<=$SATNUM; i++ ))
 do
     export PROJNAME="sc_"$i
@@ -88,14 +88,27 @@ do
     export FORTYTWONAME="fortytwo"$i
     export FSWNAME="nos_fsw"$i
     docker network create $NETNAME
-    gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $FORTYTWONAME --network=$NETNAME --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut 
-    docker network connect --alias cosmos $NETNAME cosmos
+    gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $FORTYTWONAME --network=$NETNAME --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut 
+
+    # SECTION TO CREATE A NEW COSMOS FOR EACH CONTAINER, TO SEE IF THAT IS THE PROBLEM
+    export COSMOSNAME="cosmos"$i
+    $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+        --volume $GSW_DIR:/cosmos/cosmos \
+        --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name $COSMOSNAME \
+        --network=$NETNAME --network-alias=cosmos ballaerospace/cosmos /bin/bash -c \
+        'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+
+#    docker network connect --alias cosmos $NETNAME cosmos
     sleep 5
-    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw --network=$NETNAME --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw \
+    --network=$NETNAME --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
 #    sleep 5
     # The below, when uncommented, will create a number of satellites equal to $SATNUM.
     # Each one will be prefixed with the name "sc_", followed by the number of the
     # satellite in order. 
+#    export RADIONAME="radio_sim"$i
+#    gnome-terminal --tab --title='Radio Sim' -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name radio_sim2 --network=$NETNAME --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
     docker-compose -p $PROJNAME up -d
     if [ $i -ge 2 ]; then
         let j=($i-1)
