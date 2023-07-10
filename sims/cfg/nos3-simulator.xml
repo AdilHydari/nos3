@@ -30,20 +30,20 @@
                     <!-- Something here is going to need changing; I am not quite sure what the value of nos-connection-string-override 
                     should be. My two guesses are the radio or else the time driver, though I am leaning towards the radio (and not the 
                     time driver) at present. Also, apparently I have to (probably) hardcode the radio simulators. -->
-                    <!--
+                    <!-- 
                     <connection>
                         <type>time</type>
-                        <nos-connection-string-override>tcp://radio_sim1:12001</nos-connection-string-override>
+                        <nos-connection-string-override>tcp://sc_1_nos3-radio-simulator_1:12001</nos-connection-string-override>
                         <bus-name>command</bus-name>
                         <node-name>sc1-time-driver</node-name>
                     </connection>
                     <connection>
                         <type>time</type>
-                        <nos-connection-string-override>tcp://radio_sim2:12001</nos-connection-string-override>
+                        <nos-connection-string-override>tcp://sc_2_nos3-radio-simulator_1:12001</nos-connection-string-override>
                         <bus-name>command</bus-name>
                         <node-name>sc2-time-driver</node-name>
                     </connection>
-                    -->
+                     -->
                     <!--
                     <connection>
                         <type>time</type>

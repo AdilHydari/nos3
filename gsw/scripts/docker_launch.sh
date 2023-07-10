@@ -103,6 +103,8 @@ $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_
 #    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_2 --network=sc_2_satnet --network-alias=cosmos \
 #    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+
 
 echo ""
 
@@ -129,28 +131,42 @@ do
     gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "imu_sim"$i           --network=$NETNAME --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
     gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "gps_sim"$i           --network=$NETNAME --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
     gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "rw_sim"$i            --network=$NETNAME --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
-    gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "radio_sim"$i         --network=$NETNAME --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
+    gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sc_"$i"_nos3-radio-simulator_1"         --network=$NETNAME --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
     gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sample_sim"$i        --network=$NETNAME --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
     gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "torquer_sim"$i       --network=$NETNAME --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
     gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_terminal"$i      --network=$NETNAME --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
     gnome-terminal --tab --title='NOS UDP Terminal'  -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_udp_terminal"$i  --network=$NETNAME --network-alias=nos_udp_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator udp-terminal
 
-    sleep 5
-    gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_time_driver"$i   --network=$NETNAME --network-alias=nos_time_driver -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#    sleep 5
+#    gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_time_driver"$i   --network=$NETNAME --network-alias=nos_time_driver -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#    docker network connect --alias nos_time_driver $NETNAME nos_time_driver
 
     if [ $i -ge 2 ]; then
         let j=($i-1)
         # The below defines the radio container name and the previous network
         # name; then, the current radio is connected to the previous network under
         # the alias "next_radio". 
-        export RADNAME="radio_sim"$i
+        export RADNAME="sc_"$i"_nos3-radio-simulator_1"
         export PRENETNAME="sc_"$j"_satnet"
         docker network connect --alias next_radio $PRENETNAME $RADNAME
     fi
 
 done
 
+sleep 5
+gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+sleep 1
+docker network connect --alias nos_time_driver sc_1_satnet nos_time_driver
+docker network connect --alias nos_time_driver sc_2_satnet nos_time_driver
+
+
 docker network connect --alias next_radio "sc_"$SATNUM"_satnet" radio_sim1
+
+#sleep 5
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#docker network connect --alias nos_time_driver "sc_1_satnet" nos_time_driver
+#docker network connect --alias nos_time_driver "sc_2_satnet" nos_time_driver
+
 
 #echo "Flight Software..."
 #cd $FSW_DIR
