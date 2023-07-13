@@ -56,33 +56,35 @@ $DNETWORK create \
     --gateway=192.168.41.1 \
     NOS3_GC
 #$DFLAGS --network=sc_1_satnet --name testcon nos3 /bin/bash &
-$DNETWORK create \
-    --driver=bridge \
-    --subnet=192.168.42.0/24 \
-    --gateway=192.168.42.1 \
-    sc_1_satnet
-#$DFLAGS --network=sc_1_satnet --name testcon nos3 /bin/bash &
-$DNETWORK create \
-    --driver=bridge \
-    --subnet=192.168.43.0/24 \
-    --gateway=192.168.43.1 \
-    sc_2_satnet
-#$DFLAGS --network=sc_1_satnet --name testcon nos3 /bin/bash &
+#$DNETWORK create \
+#    --driver=bridge \
+#    --subnet=192.168.42.0/24 \
+#    --gateway=192.168.42.1 \
+#    sc_1_satnet
+##$DFLAGS --network=sc_1_satnet --name testcon nos3 /bin/bash &
+#$DNETWORK create \
+#    --driver=bridge \
+#    --subnet=192.168.43.0/24 \
+#    --gateway=192.168.43.1 \
+#    sc_2_satnet
+##$DFLAGS --network=sc_1_satnet --name testcon nos3 /bin/bash &
 echo ""
 
-echo "42..."
-cd /opt/nos3/42/
-rm -rf NOS3InOut
-cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
-xhost +local:*
-gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo1 --network=sc_1_satnet --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
-gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo2 --network=sc_2_satnet --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
-echo ""
+#echo "42..."
+#cd /opt/nos3/42/
+#rm -rf NOS3InOut
+#cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
+#xhost +local:*
+#gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo1 --network=sc_1_satnet --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
+#gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name fortytwo2 --network=sc_2_satnet --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
+#echo ""
 
-echo "COSMOS Ground Station..."
-cd $BASE_DIR/gsw/cosmos
-export MISSION_NAME=$(echo "NOS3")
-export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+#echo "COSMOS Ground Station..."
+#cd $BASE_DIR/gsw/cosmos
+#export MISSION_NAME=$(echo "NOS3")
+#export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+
+
 #$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
 #    --volume $GSW_DIR:/cosmos/cosmos \
 #    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_gc --network=NOS3_GC \
@@ -93,26 +95,62 @@ export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
 #    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_gc2 --network=NOS3_GC \
 #    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 #docker network connect --alias cosmos sc_2_satnet cosmos_gc2
-$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
-    --volume $GSW_DIR:/cosmos/cosmos \
-    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_1 --network=sc_1_satnet --network-alias=cosmos \
-    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+
 
 #$DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
 #    --volume $GSW_DIR:/cosmos/cosmos \
-#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_2 --network=sc_2_satnet --network-alias=cosmos \
+#    --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos_1 --network=sc_1_satnet --network-alias=cosmos \
 #    ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
-#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
+#    echo "COSMOS Ground Station..."
+#    cd $BASE_DIR/gsw/cosmos
+#    export MISSION_NAME=$(echo "NOS3")
+#    export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+
+#    $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+#        --volume $GSW_DIR:/cosmos/cosmos \
+#        --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name cosmos --network=NOS3_GC --network-alias=cosmos \
+#        ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
 
 echo ""
 
 export SATNUM=2
+
 for (( i=1; i<=$SATNUM; i++ ))
 do
     export PROJNAME="sc_"$i
     export NETNAME="sc_"$i"_satnet"
+    echo $NETNAME
+    let j=($i+41)
+    
+    $DNETWORK create \
+        --driver=bridge \
+        --subnet=192.168.$j.0/24 \
+        --gateway=192.168.$j.1 \
+        $NETNAME
+
+    echo "42..."
+    cd /opt/nos3/42/
+    rm -rf NOS3InOut
+    cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
+    xhost +local:*
+    gnome-terminal --tab --title="42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name "fortytwo"$i --network=$NETNAME --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
+    echo ""
+
+    echo "COSMOS Ground Station..."
+    cd $BASE_DIR/gsw/cosmos
+    export MISSION_NAME=$(echo "NOS3")
+    export PROCESSOR_ENDIANNESS=$(echo "LITTLE_ENDIAN")
+
+    $DFLAGS -e DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:ro -e QT_X11_NO_MITSHM=1 \
+        --volume $GSW_DIR:/cosmos/cosmos \
+        --volume $BASE_DIR/components:/COMPONENTS -w /cosmos/cosmos -d --name "cosmos"$i --network=$NETNAME --network-alias=cosmos \
+        ballaerospace/cosmos /bin/bash -c 'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
+
+#    if [ $i -eq 2 ]; then
+#        docker network connect --alias cosmos $NETNAME cosmos
+#    fi
 
     echo "Flight Software..."
     cd $FSW_DIR
@@ -122,7 +160,7 @@ do
 
     echo "Simulators..."
     cd $SIM_BIN
-    gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_engine_server"$i -h nos_engine_server --network=$NETNAME --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
+    gnome-terminal --tab --title="NOS Engine Server" -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sc_"$i"_nos3_engine_server_standalone_1" -h nos_engine_server --network=$NETNAME --ip 192.168.$j.202 --network-alias=nos_engine_server -w $SIM_BIN ivvitc/nos3 /usr/bin/nos_engine_server_standalone -f $SIM_BIN/nos_engine_server_config.json
     gnome-terminal --tab --title='42 Truth Sim'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "truth42sim"$i        --network=$NETNAME --network-alias=truth42sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator truth42sim
     gnome-terminal --tab --title='CAM Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "cam_sim"$i           --network=$NETNAME --network-alias=cam_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-cam-simulator
     gnome-terminal --tab --title='CSS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "css_sim"$i           --network=$NETNAME --network-alias=css_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-css-simulator
@@ -131,7 +169,7 @@ do
     gnome-terminal --tab --title='IMU Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "imu_sim"$i           --network=$NETNAME --network-alias=imu_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-imu-simulator
     gnome-terminal --tab --title='GPS Sim'           -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "gps_sim"$i           --network=$NETNAME --network-alias=gps_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-gps-simulator
     gnome-terminal --tab --title='RW Sim'            -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "rw_sim"$i            --network=$NETNAME --network-alias=rw_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-reactionwheel-simulator
-    gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sc_"$i"_nos3-radio-simulator_1"         --network=$NETNAME --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
+    gnome-terminal --tab --title='Radio Sim'         -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sc_"$i"_nos3-radio-simulator_1"         --network=$NETNAME --ip 192.168.$j.200 --network-alias=radio_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-radio-simulator
     gnome-terminal --tab --title='Sample Sim'        -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "sample_sim"$i        --network=$NETNAME --network-alias=sample_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-sample-simulator
     gnome-terminal --tab --title='Torquer Sim'       -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "torquer_sim"$i       --network=$NETNAME --network-alias=torquer_sim -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-generic-torquer-simulator
     gnome-terminal --tab --title='NOS Terminal'      -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name "nos_terminal"$i      --network=$NETNAME --network-alias=nos_terminal -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator stdio-terminal
@@ -148,19 +186,23 @@ do
         # the alias "next_radio". 
         export RADNAME="sc_"$i"_nos3-radio-simulator_1"
         export PRENETNAME="sc_"$j"_satnet"
+        echo $PRENETNAME
         docker network connect --alias next_radio $PRENETNAME $RADNAME
     fi
 
 done
 
+#gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 
 sleep 5
 gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
 sleep 1
 docker network connect --alias nos_time_driver sc_1_satnet nos_time_driver
 docker network connect --alias nos_time_driver sc_2_satnet nos_time_driver
+#sleep 1
+#docker exec nos_time_driver $SIM_BIN/nos3-single-simulator time
 
 
-docker network connect --alias next_radio "sc_"$SATNUM"_satnet" radio_sim1
+docker network connect --alias next_radio "sc_"$SATNUM"_satnet" sc_1_nos3-radio-simulator_1
 
 #sleep 5
 #gnome-terminal --tab --title="NOS Time Driver"   -- $DFLAGS -v $SIM_DIR:$SIM_DIR --name nos_time_driver --network=NOS3_GC -w $SIM_BIN ivvitc/nos3 $SIM_BIN/nos3-single-simulator time
