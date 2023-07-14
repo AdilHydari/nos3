@@ -48,6 +48,10 @@ mkdir /tmp/data/inst 2> /dev/null
 mkdir /tmp/uplink 2> /dev/null
 cp $BASE_DIR/fsw/build/exe/cpu1/cf/cfe_es_startup.scr /tmp/uplink/tmp0.so 2> /dev/null
 cp $BASE_DIR/fsw/build/exe/cpu1/cf/sample.so /tmp/uplink/tmp1.so 2> /dev/null
+# 42
+cd /opt/nos3/42/
+rm -rf NOS3InOut
+cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
 
 echo "Create ground networks..."
 $DNETWORK create \
@@ -79,8 +83,6 @@ do
 
     echo $PROJNAME " - 42..."
     cd /opt/nos3/42/
-    rm -rf NOS3InOut
-    cp -r $BASE_DIR/sims/cfg/InOut /opt/nos3/42/NOS3InOut
     xhost +local:*
     gnome-terminal --tab --title=$PROJNAME" - 42" -- $DFLAGS -e DISPLAY=$DISPLAY -v /opt/nos3/42/NOS3InOut:/opt/nos3/42/NOS3InOut -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name $PROJNAME"_fortytwo" --network=$NETNAME --network-alias=fortytwo -w /opt/nos3/42 -t ivvitc/nos3 /opt/nos3/42/42 NOS3InOut
     echo ""
@@ -140,7 +142,7 @@ do
     export PROJNAME="sc_"$i
     export NETNAME=$PROJNAME"_satnet"
     export TIMENAME=$PROJNAME"_nos_time_driver"
-    docker network connect --alias $TIMENAME $NETNAME nos_time_driver
+    $DNETWORK connect --alias $TIMENAME $NETNAME nos_time_driver
 done
 echo ""
 
