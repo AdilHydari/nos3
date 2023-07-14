@@ -100,8 +100,8 @@ do
         'ruby Launcher -c nos3_launcher.txt --system nos3_system.txt && true' # true is necessary to avoid setpgrp error
 
 #    docker network connect --alias cosmos $NETNAME cosmos
-    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos-fsw \
-    --network=$NETNAME --network-alias=nos-fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
+    gnome-terminal --title="NOS3 Flight Software" -- $DFLAGS -v $FSW_DIR:$FSW_DIR --name $FSWNAME -h nos_fsw \
+    --network=$NETNAME --network-alias=nos_fsw -w $FSW_DIR --sysctl fs.mqueue.msg_max=1500 ivvitc/nos3 ./core-cpu1 -R PO &
     # The below, when uncommented, will create a number of satellites equal to $SATNUM.
     # Each one will be prefixed with the name "sc_", followed by the number of the
     # satellite in order. 
