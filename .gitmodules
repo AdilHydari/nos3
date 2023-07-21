@@ -136,3 +136,4 @@
 [submodule "components/solo_eps"]
 	path = components/solo_eps
 	url = https://github.com/ruspacetech/solo_eps.git
+	branch = main
