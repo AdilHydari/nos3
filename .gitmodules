@@ -135,5 +135,5 @@
 	branch = main
 [submodule "components/solo_eps"]
 	path = components/solo_eps
-	url = git@github.com:AdilHydari/solo_eps.git
+	url = https://github.com/AdilHydari/solo_eps.git
 	branch = main
